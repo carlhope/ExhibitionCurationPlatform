@@ -2,7 +2,7 @@
 
 namespace ExhibitionCurationPlatform.Services.Interfaces
 {
-    public interface IArtCollectionService
+    public interface IMetMuseumService
     {
         Task<List<Artwork>> SearchAsync(string query);
 

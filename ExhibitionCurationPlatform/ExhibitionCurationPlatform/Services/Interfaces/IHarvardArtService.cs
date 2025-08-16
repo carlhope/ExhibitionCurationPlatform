@@ -2,7 +2,7 @@
 
 namespace ExhibitionCurationPlatform.Services.Interfaces
 {
-    public interface IArtCollectionService
+    public interface IHarvardArtService
     {
         Task<List<Artwork>> SearchAsync(string query);
 
