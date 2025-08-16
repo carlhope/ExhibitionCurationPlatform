@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhibitionCurationPlatform.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhibitionCurationPlatform.TestApiCalls", "ExhibitionCurationPlatform.TestApiCalls\ExhibitionCurationPlatform.TestApiCalls.csproj", "{C21FDF9E-5383-4F7A-B588-F2E1416F0AFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhibitionCurationPlatform.Tests", "ExhibitionCurationPlatform.Tests\ExhibitionCurationPlatform.Tests.csproj", "{9916A2B2-041C-4A4B-8E54-D880C4DD5F4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C21FDF9E-5383-4F7A-B588-F2E1416F0AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C21FDF9E-5383-4F7A-B588-F2E1416F0AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C21FDF9E-5383-4F7A-B588-F2E1416F0AFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9916A2B2-041C-4A4B-8E54-D880C4DD5F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9916A2B2-041C-4A4B-8E54-D880C4DD5F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9916A2B2-041C-4A4B-8E54-D880C4DD5F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9916A2B2-041C-4A4B-8E54-D880C4DD5F4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
