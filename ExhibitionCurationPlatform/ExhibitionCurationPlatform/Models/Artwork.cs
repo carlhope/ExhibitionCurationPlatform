@@ -8,5 +8,9 @@
         public string ImageUrl { get; set; }
         public string Date { get; set; }
         public string Source { get; set; } // "Met" or "Harvard"
+        public Guid? ExhibitionId { get; set; }//nullable to allow artworks not yet assigned to an exhibition
+        public Exhibition? Exhibition { get; set; }
+
+
     }
 }
