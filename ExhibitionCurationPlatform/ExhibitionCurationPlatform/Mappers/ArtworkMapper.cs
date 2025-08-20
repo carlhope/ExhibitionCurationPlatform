@@ -23,8 +23,7 @@ namespace ExhibitionCurationPlatform.Mappers
         {
             Id = GetFlexibleId(json, "objectID"),
             Title = GetSafeString(json, "title", "Untitled"),
-            Artist = string.IsNullOrWhiteSpace(GetSafeString(json, "artistDisplayName", "")) ? "Unknown"
-                   : GetSafeString(json, "artistDisplayName", "Unknown"),
+            Artist = GetSafeString(json, "artistDisplayName", "Unknown"),
             ImageUrl = GetOptionalString(json, "primaryImage"),
             Date = GetSafeString(json, "objectDate", "Date unknown"),
             Source = "Met"
@@ -34,13 +33,7 @@ namespace ExhibitionCurationPlatform.Mappers
         {
             Id = GetSafeString(json, "id", Guid.NewGuid().ToString()),
             Title = GetSafeString(json, "title", "Untitled"),
-            Artist = json.TryGetProperty("people", out var peopleProp)
-                && peopleProp.ValueKind == JsonValueKind.Array
-                && peopleProp.GetArrayLength() > 0
-                && peopleProp[0].TryGetProperty("name", out var nameProp)
-                && nameProp.ValueKind == JsonValueKind.String
-                    ? nameProp.GetString() ?? "Unknown"
-                    : "Unknown",
+            Artist = GetHarvardArtist(json),
             ImageUrl = GetOptionalString(json, "primaryimageurl"),
             Date = GetSafeString(json, "dated", "Date unknown"),
             Source = "Harvard"
@@ -56,6 +49,21 @@ namespace ExhibitionCurationPlatform.Mappers
                 JsonValueKind.Number => prop.TryGetInt32(out var intId) ? intId.ToString() : Guid.NewGuid().ToString(),
                 _ => Guid.NewGuid().ToString()
             };
+        }
+        private static string GetHarvardArtist(JsonElement json)
+        {
+            if (json.TryGetProperty("people", out var peopleProp)
+                && peopleProp.ValueKind == JsonValueKind.Array
+                && peopleProp.GetArrayLength() > 0)
+            {
+                var firstPerson = peopleProp[0];
+                if (firstPerson.TryGetProperty("name", out var nameProp)
+                    && nameProp.ValueKind == JsonValueKind.String)
+                {
+                    return nameProp.GetString() ?? "Unknown";
+                }
+            }
+            return "Unknown";
         }
     }
 }
