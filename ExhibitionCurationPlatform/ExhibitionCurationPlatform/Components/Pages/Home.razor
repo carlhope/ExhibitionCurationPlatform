@@ -1,7 +1,44 @@
 ﻿@page "/"
+@using ExhibitionCurationPlatform.Models
+@using ExhibitionCurationPlatform.Services.Interfaces
+@inject IArtCollectionService ArtCollectionService
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (isLoading)
+{
+    <p>Loading artworks...</p>
+}
+else if (artworks.Count == 0)
+{
+    <p>No artworks found for "@query".</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var artwork in artworks)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" />
+                    <div class="card-body">
+                        <h5 class="card-title">@artwork.Title</h5>
+                        <p class="card-text">TODO: insert a description here</p>
+                        <span class="badge bg-secondary">@artwork.Source</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+@code {
+    private List<Artwork> artworks = new();
+    private string query = "landscape"; // Default search term
+    private bool isLoading = true;
 
-Welcome to your new app.
+    protected override async Task OnInitializedAsync()
+    {
+        artworks = await ArtCollectionService.SearchAsync(query);
+        isLoading = false;
+    }
+}

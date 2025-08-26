@@ -1,6 +1,8 @@
-﻿using ExhibitionCurationPlatform.Mappers;
+﻿using ExhibitionCurationPlatform.Config;
+using ExhibitionCurationPlatform.Mappers;
 using ExhibitionCurationPlatform.Models;
 using ExhibitionCurationPlatform.Services.Interfaces;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace ExhibitionCurationPlatform.Services
@@ -10,10 +12,10 @@ namespace ExhibitionCurationPlatform.Services
         private readonly HttpClient _http;
         private readonly string _apiKey;
 
-        public HarvardArtService(HttpClient http, string apiKey)
+        public HarvardArtService(HttpClient http, IOptions<HarvardArtOptions> options)
         {
             _http = http;
-            _apiKey = apiKey;
+            _apiKey = options.Value.ApiKey;
         }
 
         public async Task<List<Artwork>> SearchAsync(string query)

@@ -22,9 +22,9 @@ namespace ExhibitionCurationPlatform.TestApiCalls
                     var config = context.Configuration;
                     var apiKey = config["HarvardApiKey"];
 
-                    services.AddSingleton<IHarvardArtService>(new HarvardArtService(new HttpClient(), apiKey));
-                    services.AddSingleton<IMetMuseumService>(new MetMuseumService(new HttpClient()));
-                    services.AddSingleton<IArtCollectionService, ArtCollectionService>();
+                    //services.AddSingleton<IHarvardArtService>(new HarvardArtService(new HttpClient(), apiKey));
+                    //services.AddSingleton<IMetMuseumService>(new MetMuseumService(new HttpClient()));
+                    //services.AddScoped<IArtCollectionService, ArtCollectionService>();
                 })
                 .Build();
 
