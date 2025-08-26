@@ -15,6 +15,7 @@ namespace ExhibitionCurationPlatform.Services
 
         public async Task<Artwork> CreateAsync(Artwork artwork)
         {
+            artwork.Source = "User";
             return await _repository.CreateAsync(artwork);
         }
 

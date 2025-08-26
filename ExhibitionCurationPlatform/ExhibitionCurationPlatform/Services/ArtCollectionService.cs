@@ -18,7 +18,15 @@ namespace ExhibitionCurationPlatform.Services
         {
             
             var metResults = await _met.SearchAsync(query);
+            foreach (var artwork in metResults)
+            {
+                artwork.Source = "MetMuseum";
+            }
             var harvardResults = await _harvard.SearchAsync(query);
+            foreach (var artwork in harvardResults)
+            {
+                artwork.Source = "HarvardArtMuseums";
+            }
 
             return harvardResults.Concat(metResults).ToList();
         }
