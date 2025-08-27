@@ -14,17 +14,34 @@ namespace ExhibitionCurationPlatform.Services
             _met = met;
         }
 
-        public async Task<PaginatedResult<Artwork>> SearchAsync(string query, int pageNumber, int pageSize)
+        public async Task<PaginatedResult<Artwork>> SearchAsync(
+            string query,
+            int pageNumber,
+            int pageSize,
+            string? sortBy = null,
+            string? filterBy = null
+            )
         {
-            var metResults = await _met.SearchAsync(query);
+            var metResults = await _met.SearchAsync(query, filterBy);
             foreach (var artwork in metResults)
                 artwork.Source = "MetMuseum";
 
-            var harvardResults = await _harvard.SearchAsync(query);
+            var harvardResults = await _harvard.SearchAsync(query, filterBy);
             foreach (var artwork in harvardResults)
                 artwork.Source = "HarvardArtMuseums";
 
             var combined = harvardResults.Concat(metResults).ToList();
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                combined = sortBy switch
+                {
+                    "title" => combined.OrderBy(a => a.Title).ToList(),
+                    "date" => combined.OrderBy(a => a.Date).ToList(),
+                    "artist" => combined.OrderBy(a => a.Artist).ToList(),
+                    _ => combined
+                };
+            }
+
             var totalCount = combined.Count;
 
             var pagedItems = combined

@@ -3,6 +3,7 @@ using ExhibitionCurationPlatform.Mappers;
 using ExhibitionCurationPlatform.Models;
 using ExhibitionCurationPlatform.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using System.Globalization;
 using System.Text.Json;
 
 namespace ExhibitionCurationPlatform.Services
@@ -18,9 +19,13 @@ namespace ExhibitionCurationPlatform.Services
             _apiKey = options.Value.ApiKey;
         }
 
-        public async Task<List<Artwork>> SearchAsync(string query)
+        public async Task<List<Artwork>> SearchAsync(string query, string? filterBy)
         {
             var url = $"https://api.harvardartmuseums.org/object?apikey={_apiKey}&title={Uri.EscapeDataString(query)}&size=10";
+            if (!string.IsNullOrEmpty(filterBy))
+                url += $"&classification={filterBy}"; // or whatever field the API supports
+
+
             var response = await _http.GetFromJsonAsync<JsonElement>(url);
 
             if (!response.TryGetProperty("records", out var records))

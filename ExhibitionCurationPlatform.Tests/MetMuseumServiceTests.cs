@@ -50,7 +50,7 @@ namespace ExhibitionCurationPlatform.Tests
             var service = new MetMuseumService(httpClient);
 
             // Act
-            var results = await service.SearchAsync(query);
+            var results = await service.SearchAsync(query, null);
 
             // Assert
             Assert.Equal(2, results.Count);

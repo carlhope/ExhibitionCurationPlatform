@@ -1,5 +1,14 @@
-﻿<h3>ArtworkCard</h3>
+﻿@using ExhibitionCurationPlatform.Models
+
+<div class="card h-100">
+    <img src="@Artwork.ImageUrl" class="card-img-top" alt="@Artwork.Title" />
+    <div class="card-body">
+        <h5 class="card-title">@Artwork.Title</h5>
+        <p class="card-text">Create a description to place here</p>
+        <span class="badge bg-secondary">@Artwork.Source</span>
+    </div>
+</div>
 
 @code {
-
+    [Parameter] public Artwork Artwork { get; set; } = default!;
 }

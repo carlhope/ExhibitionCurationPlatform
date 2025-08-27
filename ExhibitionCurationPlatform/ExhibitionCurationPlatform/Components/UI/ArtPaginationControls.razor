@@ -1,0 +1,14 @@
+﻿<div class="mt-4 d-flex justify-content-center">
+    <button class="btn btn-outline-primary me-2" @onclick="Previous" disabled="@(!CanGoBack)">Previous</button>
+    <span>Page @CurrentPage of @TotalPages</span>
+    <button class="btn btn-outline-primary ms-2" @onclick="Next" disabled="@(!CanGoForward)">Next</button>
+</div>
+
+@code {
+    [Parameter] public int CurrentPage { get; set; }
+    [Parameter] public int TotalPages { get; set; }
+    [Parameter] public bool CanGoBack { get; set; }
+    [Parameter] public bool CanGoForward { get; set; }
+    [Parameter] public EventCallback Previous { get; set; }
+    [Parameter] public EventCallback Next { get; set; }
+}

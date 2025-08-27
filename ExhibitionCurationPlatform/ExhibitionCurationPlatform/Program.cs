@@ -35,6 +35,7 @@ namespace ExhibitionCurationPlatform
             builder.Services.AddHttpClient<IHarvardArtService, HarvardArtService>();
             builder.Services.AddScoped<IArtCollectionService, ArtCollectionService>();
 
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

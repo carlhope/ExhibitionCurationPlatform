@@ -1,4 +1,5 @@
-﻿using ExhibitionCurationPlatform.Services;
+﻿using ExhibitionCurationPlatform.Config;
+using ExhibitionCurationPlatform.Services;
 using ExhibitionCurationPlatform.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,16 +21,20 @@ namespace ExhibitionCurationPlatform.TestApiCalls
                 .ConfigureServices((context, services) =>
                 {
                     var config = context.Configuration;
-                    var apiKey = config["HarvardApiKey"];
+                    services.Configure<HarvardArtOptions>(
+                    context.Configuration.GetSection("HarvardArt"));
+                
+                    var options = context.Configuration.GetSection("HarvardArt").Get<HarvardArtOptions>();
+                    Console.WriteLine($"Console App API Key: {options.ApiKey ?? "null"}");
 
-                    //services.AddSingleton<IHarvardArtService>(new HarvardArtService(new HttpClient(), apiKey));
-                    //services.AddSingleton<IMetMuseumService>(new MetMuseumService(new HttpClient()));
-                    //services.AddScoped<IArtCollectionService, ArtCollectionService>();
+                    services.AddHttpClient<IMetMuseumService, MetMuseumService>();
+                    services.AddHttpClient<IHarvardArtService, HarvardArtService>();
+                    services.AddScoped<IArtCollectionService, ArtCollectionService>();
                 })
                 .Build();
 
             var service = host.Services.GetRequiredService<IArtCollectionService>();
-            var results = await service.SearchAsync("Monet", 1,12);
+            var results = await service.SearchAsync("Monet", 1,12, null, null);
 
             foreach (var art in results.Items)
             {

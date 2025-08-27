@@ -1,0 +1,18 @@
+﻿<div class="d-flex mb-3">
+    <input class="form-control me-2" @bind="searchTerm" placeholder="Search artworks..." />
+    <button class="btn btn-primary" @onclick="TriggerSearch">Search</button>
+</div>
+
+@code {
+    private string searchTerm = "";
+
+    [Parameter] public EventCallback<string> OnSearch { get; set; }
+
+    private async Task TriggerSearch()
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            await OnSearch.InvokeAsync(searchTerm);
+        }
+    }
+}

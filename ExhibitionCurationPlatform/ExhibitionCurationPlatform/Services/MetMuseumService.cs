@@ -1,6 +1,7 @@
 ﻿using ExhibitionCurationPlatform.Mappers;
 using ExhibitionCurationPlatform.Models;
 using ExhibitionCurationPlatform.Services.Interfaces;
+using System;
 using System.Text.Json;
 
 namespace ExhibitionCurationPlatform.Services
@@ -14,13 +15,16 @@ namespace ExhibitionCurationPlatform.Services
             _http = http;
         }
 
-        public async Task<List<Artwork>> SearchAsync(string query)
+        public async Task<List<Artwork>> SearchAsync(string query, string? filterBy)
         {
             var artworks = new List<Artwork>();
 
             try
             {
                 var searchUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/search?q={Uri.EscapeDataString(query)}";
+                if (!string.IsNullOrEmpty(filterBy))
+                    searchUrl += $"&classification={filterBy}"; // or whatever field the API supports
+
                 var searchResponse = await _http.GetFromJsonAsync<JsonElement>(searchUrl);
 
                 if (!searchResponse.TryGetProperty("objectIDs", out var ids) || ids.GetArrayLength() == 0)

@@ -49,7 +49,7 @@ namespace ExhibitionCurationPlatform.Tests
             var service = new HarvardArtService(httpClient, options);
 
             // Act
-            var result = await service.SearchAsync("test");
+            var result = await service.SearchAsync("test", null);
 
             // Assert
             Assert.Single(result);
