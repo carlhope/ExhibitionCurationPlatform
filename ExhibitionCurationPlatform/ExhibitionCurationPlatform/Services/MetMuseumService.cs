@@ -16,19 +16,42 @@ namespace ExhibitionCurationPlatform.Services
 
         public async Task<List<Artwork>> SearchAsync(string query)
         {
-            var searchUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/search?q={Uri.EscapeDataString(query)}";
-            var searchResponse = await _http.GetFromJsonAsync<JsonElement>(searchUrl);
-
-            if (!searchResponse.TryGetProperty("objectIDs", out var ids) || ids.GetArrayLength() == 0)
-                return [];
-
             var artworks = new List<Artwork>();
-            foreach (var id in ids.EnumerateArray().Take(10))
-            {
-                var objUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/objects/{id}";
-                var objResponse = await _http.GetFromJsonAsync<JsonElement>(objUrl);
 
-                artworks.Add(ArtworkMapper.FromMetMuseumJson(objResponse));
+            try
+            {
+                var searchUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/search?q={Uri.EscapeDataString(query)}";
+                var searchResponse = await _http.GetFromJsonAsync<JsonElement>(searchUrl);
+
+                if (!searchResponse.TryGetProperty("objectIDs", out var ids) || ids.GetArrayLength() == 0)
+                    return [];
+
+                var objectIds = ids.EnumerateArray()
+                                   .Take(10)
+                                   .Select(id => id.GetInt32())
+                                   .ToList();
+
+                var fetchTasks = objectIds.Select(async id =>
+                {
+                    try
+                    {
+                        var objUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/objects/{id}";
+                        var objResponse = await _http.GetFromJsonAsync<JsonElement>(objUrl);
+                        return ArtworkMapper.FromMetMuseumJson(objResponse);
+                    }
+                    catch
+                    {
+                        // Skip failed fetches silently
+                        return null;
+                    }
+                });
+
+                var results = await Task.WhenAll(fetchTasks);
+                artworks = results.Where(a => a != null).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SearchAsync failed: {ex.Message}");
             }
 
             return artworks;

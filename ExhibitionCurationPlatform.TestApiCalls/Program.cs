@@ -29,9 +29,9 @@ namespace ExhibitionCurationPlatform.TestApiCalls
                 .Build();
 
             var service = host.Services.GetRequiredService<IArtCollectionService>();
-            var results = await service.SearchAsync("Monet");
+            var results = await service.SearchAsync("Monet", 1,12);
 
-            foreach (var art in results)
+            foreach (var art in results.Items)
             {
                 Console.WriteLine($"[{art.Source}] {art.Title} by {art.Artist}");
             }

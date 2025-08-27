@@ -1,5 +1,7 @@
-﻿using ExhibitionCurationPlatform.Mappers;
+﻿using ExhibitionCurationPlatform.Config;
+using ExhibitionCurationPlatform.Mappers;
 using ExhibitionCurationPlatform.Services;
+using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using System.Net;
@@ -39,7 +41,12 @@ namespace ExhibitionCurationPlatform.Tests
                 });
 
             var httpClient = new HttpClient(handler.Object);
-            var service = new HarvardArtService(httpClient, "fake-api-key");
+            var options = Options.Create(new HarvardArtOptions
+            {
+                ApiKey = "fake-api-key"
+            });
+
+            var service = new HarvardArtService(httpClient, options);
 
             // Act
             var result = await service.SearchAsync("test");

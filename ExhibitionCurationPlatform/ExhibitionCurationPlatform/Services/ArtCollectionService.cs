@@ -14,21 +14,29 @@ namespace ExhibitionCurationPlatform.Services
             _met = met;
         }
 
-        public async Task<List<Artwork>> SearchAsync(string query)
+        public async Task<PaginatedResult<Artwork>> SearchAsync(string query, int pageNumber, int pageSize)
         {
-            
             var metResults = await _met.SearchAsync(query);
             foreach (var artwork in metResults)
-            {
                 artwork.Source = "MetMuseum";
-            }
+
             var harvardResults = await _harvard.SearchAsync(query);
             foreach (var artwork in harvardResults)
-            {
                 artwork.Source = "HarvardArtMuseums";
-            }
 
-            return harvardResults.Concat(metResults).ToList();
+            var combined = harvardResults.Concat(metResults).ToList();
+            var totalCount = combined.Count;
+
+            var pagedItems = combined
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PaginatedResult<Artwork>
+            {
+                Items = pagedItems,
+                TotalCount = totalCount
+            };
         }
     }
 }
