@@ -1,18 +1,28 @@
-﻿<div class="d-flex mb-3">
+﻿@using ExhibitionCurationPlatform.Static_Data
+<div class="d-flex mb-3">
     <input class="form-control me-2" @bind="searchTerm" placeholder="Search artworks..." />
+
+    <select class="form-select me-2" @bind="selectedSort">
+        <option value="">Sort by...</option>
+        <option value="@SortOptions.Title">Title</option>
+        <option value="@SortOptions.Date">Date</option>
+        <option value="@SortOptions.Artist">Artist</option>
+    </select>
+
     <button class="btn btn-primary" @onclick="TriggerSearch">Search</button>
 </div>
 
 @code {
     private string searchTerm = "";
+    private string selectedSort = "";
 
-    [Parameter] public EventCallback<string> OnSearch { get; set; }
+    [Parameter] public EventCallback<(string query, string sortBy)> OnSearch { get; set; }
 
     private async Task TriggerSearch()
     {
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            await OnSearch.InvokeAsync(searchTerm);
+            await OnSearch.InvokeAsync((searchTerm, selectedSort));
         }
     }
 }

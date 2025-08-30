@@ -1,5 +1,6 @@
 ﻿using ExhibitionCurationPlatform.Models;
 using ExhibitionCurationPlatform.Services.Interfaces;
+using ExhibitionCurationPlatform.Static_Data;
 
 namespace ExhibitionCurationPlatform.Services
 {
@@ -35,9 +36,9 @@ namespace ExhibitionCurationPlatform.Services
             {
                 combined = sortBy switch
                 {
-                    "title" => combined.OrderBy(a => a.Title).ToList(),
-                    "date" => combined.OrderBy(a => a.Date).ToList(),
-                    "artist" => combined.OrderBy(a => a.Artist).ToList(),
+                    SortOptions.Title => combined.OrderBy(a => a.Title).ToList(),
+                    SortOptions.Date => combined.OrderBy(a => a.Date).ToList(),
+                    SortOptions.Artist => combined.OrderBy(a => a.Artist).ToList(),
                     _ => combined
                 };
             }

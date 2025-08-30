@@ -46,21 +46,24 @@ else
     private int pageSize = 12;
     private int totalCount;
     private int totalPages => (int)Math.Ceiling((double)totalCount / pageSize);
+    private string currentSort = "";
+
 
     protected override async Task OnInitializedAsync() => await LoadPage(currentPage);
 
     private async Task LoadPage(int page)
     {
         isLoading = true;
-        var result = await ArtCollectionService.SearchAsync(query, page, pageSize, null, null);
+        var result = await ArtCollectionService.SearchAsync(query, page, pageSize, currentSort, null);
         artworks = result.Items;
         totalCount = result.TotalCount;
         currentPage = page;
         isLoading = false;
     }
-    private async Task UpdateQuery(string newQuery)
+    private async Task UpdateQuery((string newQuery, string sortBy) searchParams)
     {
-        query = newQuery;
+        query = searchParams.newQuery;
+        currentSort = searchParams.sortBy;
         await LoadPage(1);
     }
 
