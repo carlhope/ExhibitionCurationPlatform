@@ -2,7 +2,7 @@
 
 namespace ExhibitionCurationPlatform.Repository.Interfaces
 {
-    public interface IExhibitionInterface
+    public interface IExhibitionRepository
     {
         Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description);
         Task<bool> AddArtworkAsync(Guid exhibitionId, Artwork artwork);

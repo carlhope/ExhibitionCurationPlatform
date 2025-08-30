@@ -10,12 +10,12 @@ namespace ExhibitionCurationPlatform.Tests
 
     public class ExhibitionServiceTests
     {
-        private readonly Mock<IExhibitionInterface> _mockRepo;
+        private readonly Mock<IExhibitionRepository> _mockRepo;
         private readonly ExhibitionService _service;
 
         public ExhibitionServiceTests()
         {
-            _mockRepo = new Mock<IExhibitionInterface>();
+            _mockRepo = new Mock<IExhibitionRepository>();
             _service = new ExhibitionService(_mockRepo.Object);
         }
 

@@ -1,0 +1,43 @@
+﻿@page "/exhibitions"
+@using ExhibitionCurationPlatform.Models
+@using ExhibitionCurationPlatform.Services.Interfaces
+@inject IExhibitionService ExhibitionService
+
+<h3>Your Exhibitions</h3>
+
+@if (exhibitions == null)
+{
+    <p>Loading exhibitions...</p>
+}
+else if (!exhibitions.Any())
+{
+    <p>No exhibitions found for this curator.</p>
+}
+else
+{
+    <div class="exhibition-list">
+        @foreach (var exhibition in exhibitions)
+        {
+            <div class="exhibition-card">
+                <h4>@exhibition.Title</h4>
+                <p>@exhibition.Description</p>
+                <p><strong>Scheduled:</strong> @(exhibition.ScheduledDate?.ToShortDateString() ?? "Not scheduled")</p>
+                <p><strong>Created:</strong> @exhibition.CreatedAt.ToShortDateString()</p>
+                <p><strong>Layout:</strong> @exhibition.Layout</p>
+                <p><strong>Theme:</strong> @exhibition.Theme</p>
+                <p><strong>Artworks:</strong> @exhibition.Artworks.Count</p>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Exhibition> exhibitions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        var curator = "User"; // Placeholder until Identity is wired in
+        exhibitions = await ExhibitionService.GetExhibitionsByCuratorAsync(curator);
+    }
+}

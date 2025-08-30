@@ -2,6 +2,8 @@ using ExhibitionCurationPlatform.Client.Pages;
 using ExhibitionCurationPlatform.Components;
 using ExhibitionCurationPlatform.Config;
 using ExhibitionCurationPlatform.Context;
+using ExhibitionCurationPlatform.Repository;
+using ExhibitionCurationPlatform.Repository.Interfaces;
 using ExhibitionCurationPlatform.Services;
 using ExhibitionCurationPlatform.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +36,8 @@ namespace ExhibitionCurationPlatform
             builder.Services.AddHttpClient<IMetMuseumService, MetMuseumService>();
             builder.Services.AddHttpClient<IHarvardArtService, HarvardArtService>();
             builder.Services.AddScoped<IArtCollectionService, ArtCollectionService>();
+            builder.Services.AddScoped<IExhibitionRepository,ExhibitionRepository>();
+            builder.Services.AddScoped<IExhibitionService, ExhibitionService>();
 
 
             var app = builder.Build();

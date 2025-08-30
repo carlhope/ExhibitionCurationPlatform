@@ -1,0 +1,61 @@
+﻿@page "/exhibitions/create"
+@rendermode InteractiveServer
+@using ExhibitionCurationPlatform.Services.Interfaces
+@using System.ComponentModel.DataAnnotations
+@inject IExhibitionService ExhibitionService
+
+<h3>Create New Exhibition</h3>
+
+<EditForm Model="@newExhibition" OnValidSubmit="HandleSubmit" FormName="create-exhibition-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Exhibition Title</label>
+        <InputText id="title" class="form-control" @bind-Value="newExhibition.Title" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="newExhibition.Description" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Exhibition</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    private ExhibitionInputModel newExhibition = new()
+    {
+        Curator = "User" // Placeholder until Identity is wired in
+
+    };
+
+    private string? successMessage;
+
+    private async Task HandleSubmit()
+    {
+        var created = await ExhibitionService.CreateExhibitionAsync(
+            newExhibition.Title,
+            newExhibition.Curator,
+            newExhibition.Description
+        );
+
+        successMessage = $"Exhibition '{created.Title}' created successfully.";
+        newExhibition = new() { Curator = "demo-user" }; // Reset form
+    }
+
+    public class ExhibitionInputModel
+    {
+        [Required]
+        public string Title { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
+
+        public string Curator { get; set; } = string.Empty;
+    }
+}

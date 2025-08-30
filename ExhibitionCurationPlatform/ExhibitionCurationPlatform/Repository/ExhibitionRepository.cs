@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExhibitionCurationPlatform.Repository
 {
-    public class ExhibitionRepository : IExhibitionInterface
+    public class ExhibitionRepository : IExhibitionRepository
     {
         private readonly ApplicationDbContext _db;
 

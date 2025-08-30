@@ -7,9 +7,9 @@ namespace ExhibitionCurationPlatform.Services
 {
     public class ExhibitionService : IExhibitionService
     {
-        private readonly IExhibitionInterface _exhibitionRepository;
+        private readonly IExhibitionRepository _exhibitionRepository;
 
-        public ExhibitionService(IExhibitionInterface exhibitionRepository)
+        public ExhibitionService(IExhibitionRepository exhibitionRepository)
         {
             _exhibitionRepository = exhibitionRepository;
         }
