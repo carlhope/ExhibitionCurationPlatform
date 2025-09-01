@@ -35,6 +35,8 @@ namespace ExhibitionCurationPlatform
                 .AddInteractiveWebAssemblyComponents();
             builder.Services.AddHttpClient<IMetMuseumService, MetMuseumService>();
             builder.Services.AddHttpClient<IHarvardArtService, HarvardArtService>();
+            builder.Services.AddScoped<IArtworkService, ArtworkService>();
+            builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
             builder.Services.AddScoped<IArtCollectionService, ArtCollectionService>();
             builder.Services.AddScoped<IExhibitionRepository,ExhibitionRepository>();
             builder.Services.AddScoped<IExhibitionService, ExhibitionService>();

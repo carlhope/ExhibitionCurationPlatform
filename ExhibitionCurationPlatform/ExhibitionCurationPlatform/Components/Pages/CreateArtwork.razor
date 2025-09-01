@@ -1,0 +1,50 @@
+﻿@page "/create-artwork"
+@rendermode InteractiveServer
+@using ExhibitionCurationPlatform.Models
+@using ExhibitionCurationPlatform.Services.Interfaces
+@inject IArtworkService ArtworkService
+
+<EditForm Model="@artwork" OnValidSubmit="HandleValidSubmit" FormName="CreateArtwork">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="artwork.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Artist</label>
+        <InputText class="form-control" @bind-Value="artwork.Artist" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Image URL</label>
+        <InputText class="form-control" @bind-Value="artwork.ImageUrl" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Date</label>
+        <InputText class="form-control" @bind-Value="artwork.Date" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    private Artwork artwork = new();
+    private string? successMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        artwork.CreatedBy = "User"; // Replace with actual user ID
+        await ArtworkService.CreateAsync(artwork);
+        successMessage = "Artwork submitted successfully!";
+        artwork = new(); // Reset form
+    }
+}
