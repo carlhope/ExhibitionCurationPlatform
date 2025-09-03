@@ -2,7 +2,7 @@
 <div class="d-flex mb-3">
     <input class="form-control me-2" @bind="searchTerm" placeholder="Search artworks..." />
 
-    <select class="form-select me-2" @bind="selectedSort">
+    <select class="form-select me-2" @bind="selectedSort" aria-label="sort artwork by">
         <option value="">Sort by...</option>
         <option value="@SortOptions.Title">Title</option>
         <option value="@SortOptions.Date">Date</option>

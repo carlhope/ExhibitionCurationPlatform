@@ -1,31 +1,33 @@
-﻿@page "/create-artwork"
+﻿@page "/my-artwork/create"
 @rendermode InteractiveServer
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
 @inject IArtworkService ArtworkService
+
+<PageTitle>Create Artwork</PageTitle>
 
 <EditForm Model="@artwork" OnValidSubmit="HandleValidSubmit" FormName="CreateArtwork">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <InputText id="title" class="form-control" @bind-Value="artwork.Title" />
+        <label for="artwork-title" class="form-label">Title</label>
+        <InputText id="artwork-title" class="form-control" @bind-Value="artwork.Title" />
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Artist</label>
-        <InputText class="form-control" @bind-Value="artwork.Artist" />
+        <label for="artwork-artist" class="form-label">Artist</label>
+        <InputText id="artwork-artist" class="form-control" @bind-Value="artwork.Artist" />
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Image URL</label>
-        <InputText class="form-control" @bind-Value="artwork.ImageUrl" />
+        <label for="artwork-image" class="form-label">Image URL</label>
+        <InputText id="artwork-image" class="form-control" @bind-Value="artwork.ImageUrl" />
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Date</label>
-        <InputText class="form-control" @bind-Value="artwork.Date" />
+        <label for="artwork-date" class="form-label">Date</label>
+        <InputText id="artwork-date" class="form-control" @bind-Value="artwork.Date" />
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>

@@ -4,7 +4,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject IExhibitionService ExhibitionService
 
-<h3>Create New Exhibition</h3>
+<PageTitle>Create New Exhibition</PageTitle>
 
 <EditForm Model="@newExhibition" OnValidSubmit="HandleSubmit" FormName="create-exhibition-form">
     <DataAnnotationsValidator />
