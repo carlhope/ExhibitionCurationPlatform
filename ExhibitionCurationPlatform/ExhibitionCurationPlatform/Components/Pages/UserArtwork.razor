@@ -24,7 +24,7 @@ else
         <div class="card h-100">
             <img src="@art.ImageUrl" class="card-img-top" alt="@art.Title" />
             <div class="card-body">
-                <h5 class="card-title">@art.Title</h5>
+                <div class="card-title h5">@art.Title</div>
                 <p class="card-text"><strong>Artist:</strong> @art.Artist</p>
                 <p class="card-text"><strong>Date:</strong> @art.Date</p>
                 <span class="badge bg-secondary">@art.Source</span>
@@ -33,7 +33,7 @@ else
                 {
                     <div class="mt-3">
                    <select class="form-select"
-        @onchange="(e) => OnCollectionSelected(art.Id, Guid.Parse(e.Value?.ToString() ?? Guid.Empty.ToString()))">
+        @onchange="(e) => OnCollectionSelected(art.Id, Guid.Parse(e.Value?.ToString() ?? Guid.Empty.ToString()))" aria-label="Select collection">
     <option value="">Select collection</option>
     @foreach (var col in userCollections)
     {

@@ -19,7 +19,7 @@ else
         @foreach (var exhibition in exhibitions)
         {
             <div class="exhibition-card">
-                <h4>@exhibition.Title</h4>
+                <div class="card-title h4">@exhibition.Title</div>
                 <p>@exhibition.Description</p>
                 <p><strong>Scheduled:</strong> @(exhibition.ScheduledDate?.ToShortDateString() ?? "Not scheduled")</p>
                 <p><strong>Created:</strong> @exhibition.CreatedAt.ToShortDateString()</p>
