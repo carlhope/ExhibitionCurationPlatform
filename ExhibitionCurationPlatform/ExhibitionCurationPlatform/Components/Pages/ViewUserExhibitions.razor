@@ -18,7 +18,7 @@ else
     <div class="exhibition-list">
         @foreach (var exhibition in exhibitions)
         {
-            <div class="exhibition-card">
+            <div class="exhibition-card border rounded p-3 mb-4">
                 <div class="card-title h4">@exhibition.Title</div>
                 <p>@exhibition.Description</p>
                 <p><strong>Scheduled:</strong> @(exhibition.ScheduledDate?.ToShortDateString() ?? "Not scheduled")</p>
@@ -26,6 +26,19 @@ else
                 <p><strong>Layout:</strong> @exhibition.Layout</p>
                 <p><strong>Theme:</strong> @exhibition.Theme</p>
                 <p><strong>Artworks:</strong> @exhibition.Artworks.Count</p>
+
+                @if (exhibition.Artworks?.Any() == true)
+                {
+                    <ul class="artwork-list ps-3">
+                        @foreach (var artwork in exhibition.Artworks.Take(3))
+                        {
+                            <li>
+                                <strong>@artwork.Title</strong>
+                                <span class="text-muted">(@artwork.Date)</span>
+                            </li>
+                        }
+                    </ul>
+                }
             </div>
         }
     </div>
