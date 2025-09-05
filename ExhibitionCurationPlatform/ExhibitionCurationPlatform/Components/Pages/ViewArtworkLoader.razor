@@ -1,0 +1,55 @@
+﻿@page "/artwork/{Source}/{Id}"
+@rendermode InteractiveServer
+@using ExhibitionCurationPlatform.Components.UI
+@using ExhibitionCurationPlatform.Models
+@using ExhibitionCurationPlatform.Services.Interfaces
+@inject IMetMuseumService MetService
+@inject IHarvardArtService HarvardService
+@inject IArtworkService UserService
+
+<PageTitle>Artwork Details</PageTitle>
+
+@if (notFound)
+{
+    <div class="alert alert-warning">Artwork not found or source is invalid.</div>
+}
+else if (!isLoading && artwork != null)
+{
+    <ViewArtworkUI Artwork="artwork" />
+}
+
+
+@code {
+    [Parameter] public string Source { get; set; } = default!;
+    [Parameter] public string Id { get; set; } = default!;
+    private Artwork? artwork;
+    private bool isLoading = true;
+    private bool notFound = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            switch (Source.ToLower())
+            {
+                case "metmuseum":
+                    artwork = await MetService.GetByIdAsync(Id);
+                    break;
+                case "harvardartmuseums":
+                    artwork = await HarvardService.GetByIdAsync(Id);
+                    break;
+                case "user":
+                    artwork = await UserService.GetByIdAsync(Id);
+                    break;
+                default:
+                    notFound = true;
+                    break;
+            }
+        }
+        catch
+        {
+            notFound = true;
+        }
+        isLoading = false;
+    }
+}

@@ -19,6 +19,18 @@ namespace ExhibitionCurationPlatform.Services
             _apiKey = options.Value.ApiKey;
         }
 
+        public async Task<Artwork?> GetByIdAsync(string id)
+        {
+            var response = await _http.GetAsync($"https://api.harvardartmuseums.org/object/{id}?apikey={_apiKey}");
+            if (!response.IsSuccessStatusCode) return null;
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var json = await JsonDocument.ParseAsync(stream);
+
+            return ArtworkMapper.FromHarvardJson(json.RootElement);
+
+        }
+
         public async Task<List<Artwork>> SearchAsync(string query, string? filterBy)
         {
             var url = $"https://api.harvardartmuseums.org/object?apikey={_apiKey}&title={Uri.EscapeDataString(query)}&size=10";

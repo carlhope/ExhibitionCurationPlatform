@@ -15,6 +15,19 @@ namespace ExhibitionCurationPlatform.Services
             _http = http;
         }
 
+        public async Task<Artwork?> GetByIdAsync(string id)
+        {
+            var response = await _http.GetAsync($"https://collectionapi.metmuseum.org/public/collection/v1/objects/{id}");
+            if (!response.IsSuccessStatusCode) return null;
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var json = await JsonDocument.ParseAsync(stream);
+
+            return ArtworkMapper.FromMetMuseumJson(json.RootElement);
+
+
+        }
+
         public async Task<List<Artwork>> SearchAsync(string query, string? filterBy)
         {
             var artworks = new List<Artwork>();
@@ -23,7 +36,7 @@ namespace ExhibitionCurationPlatform.Services
             {
                 var searchUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/search?q={Uri.EscapeDataString(query)}";
                 if (!string.IsNullOrEmpty(filterBy))
-                    searchUrl += $"&classification={filterBy}"; // or whatever field the API supports
+                    searchUrl += $"&classification={filterBy}";
 
                 var searchResponse = await _http.GetFromJsonAsync<JsonElement>(searchUrl);
 
@@ -35,20 +48,8 @@ namespace ExhibitionCurationPlatform.Services
                                    .Select(id => id.GetInt32())
                                    .ToList();
 
-                var fetchTasks = objectIds.Select(async id =>
-                {
-                    try
-                    {
-                        var objUrl = $"https://collectionapi.metmuseum.org/public/collection/v1/objects/{id}";
-                        var objResponse = await _http.GetFromJsonAsync<JsonElement>(objUrl);
-                        return ArtworkMapper.FromMetMuseumJson(objResponse);
-                    }
-                    catch
-                    {
-                        // Skip failed fetches silently
-                        return null;
-                    }
-                });
+                var fetchTasks = objectIds.Select(id => GetByIdAsync(id.ToString()));
+
 
                 var results = await Task.WhenAll(fetchTasks);
                 artworks = results.Where(a => a != null).ToList();

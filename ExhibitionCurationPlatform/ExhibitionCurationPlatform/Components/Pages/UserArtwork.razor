@@ -28,6 +28,10 @@ else
                 <p class="card-text"><strong>Artist:</strong> @art.Artist</p>
                 <p class="card-text"><strong>Date:</strong> @art.Date</p>
                 <span class="badge bg-secondary">@art.Source</span>
+                <a class="btn btn-sm btn-outline-primary"
+                   href="@($"/artwork/{art.Source.ToLower()}/{art.Id}")">
+                    Details
+                </a>
 
                 @if (userCollections != null && userCollections.Any())
                 {

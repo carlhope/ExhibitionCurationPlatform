@@ -1,0 +1,12 @@
+﻿@using ExhibitionCurationPlatform.Models
+@code {
+    [Parameter] public Artwork Artwork { get; set; } = default!;
+}
+
+<div class="artwork-details border rounded p-4">
+    <h2>@Artwork.Title</h2>
+    <p><strong>Artist:</strong> @Artwork.Artist</p>
+    <p><strong>Date:</strong> @Artwork.Date</p>
+    <img src="@Artwork.ImageUrl" alt="@Artwork.Title" class="img-fluid mb-3" height="400" width="400" />
+    <p><strong>Source:</strong> @Artwork.Source</p>
+</div>

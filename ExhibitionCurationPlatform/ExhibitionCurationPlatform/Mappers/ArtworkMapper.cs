@@ -31,7 +31,7 @@ namespace ExhibitionCurationPlatform.Mappers
 
         public static Artwork FromHarvardJson(JsonElement json) => new Artwork
         {
-            Id = GetSafeString(json, "id", Guid.NewGuid().ToString()),
+            Id = GetFlexibleId(json, "id"),
             Title = GetSafeString(json, "title", "Untitled"),
             Artist = GetHarvardArtist(json),
             ImageUrl = GetOptionalString(json, "primaryimageurl"),

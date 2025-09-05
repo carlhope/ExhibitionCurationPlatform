@@ -6,6 +6,10 @@
         <div class="card-title h5" aria-label="Title">@Artwork.Title</div>
         <p class="card-text" aria-label="Description">Create a description to place here</p>
         <span class="badge bg-secondary" aria-label="Source of Artwork ">@Artwork.Source</span>
+        <a class="btn btn-sm btn-outline-primary"
+           href="@($"/artwork/{@Artwork.Source.ToLower()}/{@Artwork.Id}")">
+            Details
+        </a>
     </div>
 </div>
 

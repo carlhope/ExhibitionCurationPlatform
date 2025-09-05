@@ -29,15 +29,26 @@ else
 
                 @if (exhibition.Artworks?.Any() == true)
                 {
-                    <ul class="artwork-list ps-3">
-                        @foreach (var artwork in exhibition.Artworks.Take(3))
+                    <div class="artwork-list row row-cols-1 row-cols-md-2 g-3">
+                        @foreach (var artwork in exhibition.Artworks)
                         {
-                            <li>
-                                <strong>@artwork.Title</strong>
-                                <span class="text-muted">(@artwork.Date)</span>
-                            </li>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" style="object-fit: cover; height: 200px;" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">@artwork.Title</h5>
+                                        <p class="card-text">
+                                            <strong>Artist:</strong> @artwork.Artist<br />
+                                            <strong>Date:</strong> @artwork.Date
+                                        </p>
+                                        <a class="btn btn-sm btn-primary" href="@($"/artwork/{artwork.Source.ToLower()}/{artwork.Id}")">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         }
-                    </ul>
+                    </div>
                 }
             </div>
         }
