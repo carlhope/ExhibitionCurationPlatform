@@ -23,9 +23,11 @@ namespace ExhibitionCurationPlatform.Mappers
         {
             Id = GetFlexibleId(json, "objectID"),
             Title = GetSafeString(json, "title", "Untitled"),
+            Description = ComposeMetDescription(json),
             Artist = GetSafeString(json, "artistDisplayName", "Unknown"),
             ImageUrl = GetOptionalString(json, "primaryImage"),
-            Date = GetSafeString(json, "objectDate", "Date unknown"),
+            Date = ParseDateOrDefault(GetSafeString(json, "objectDate", ""), new DateOnly(1, 1, 1)),
+            DateAsString = GetSafeString(json, "objectDate", "Date unknown"),
             Source = "Met"
         };
 
@@ -33,9 +35,11 @@ namespace ExhibitionCurationPlatform.Mappers
         {
             Id = GetFlexibleId(json, "id"),
             Title = GetSafeString(json, "title", "Untitled"),
+            Description = ComposeHarvardDescription(json),
             Artist = GetHarvardArtist(json),
             ImageUrl = GetOptionalString(json, "primaryimageurl"),
-            Date = GetSafeString(json, "dated", "Date unknown"),
+            Date = ParseDateOrDefault(GetSafeString(json, "dated", ""), new DateOnly(1, 1, 1)),
+            DateAsString = GetSafeString(json, "dated", "Date unknown"),
             Source = "Harvard"
         };
 
@@ -64,6 +68,33 @@ namespace ExhibitionCurationPlatform.Mappers
                 }
             }
             return "Unknown";
+        }
+        public static string ComposeMetDescription(JsonElement json)
+        {
+            var title = GetSafeString(json, "title", "Untitled");
+            var artist = GetSafeString(json, "artistDisplayName", "Unknown artist");
+            var date = GetSafeString(json, "objectDate", "date unknown");
+            return $"“{title}” by {artist}, created in {date}. Part of the Met collection.";
+        }
+        public static string ComposeHarvardDescription(JsonElement json)
+        {
+            var title = GetSafeString(json, "title", "Untitled");
+            var date = GetSafeString(json, "dated", "date unknown");
+            var artist = GetHarvardArtist(json); // already handles fallback
+            return $"“{title}” by {artist}, created in {date}. Part of the Harvard collection.";
+        }
+        public static DateOnly ParseDateOrDefault(string rawDate, DateOnly fallback)
+        {
+            // Try full date first (e.g. "1889-01-01")
+            if (DateOnly.TryParse(rawDate, out var parsedFull))
+                return parsedFull;
+
+            // Try year-only (e.g. "1889")
+            if (int.TryParse(rawDate, out var year) && year > 0)
+                return new DateOnly(year, 1, 1); // Default to Jan 1st of that year
+
+            // Fallback
+            return fallback;
         }
     }
 }

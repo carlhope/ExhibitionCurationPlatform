@@ -1,5 +1,6 @@
 ﻿@page "/my-artworks"
 @rendermode InteractiveServer
+@using ExhibitionCurationPlatform.Components.UI
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
 @inject IArtworkService ArtworkService
@@ -17,49 +18,17 @@ else if (!artworks.Any())
 }
 else
 {
-    <div class="row">
+    <div class="row row-cols-1 row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-4">
   @foreach (var art in artworks)
 {
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <img src="@art.ImageUrl" class="card-img-top" alt="@art.Title" />
-            <div class="card-body">
-                <div class="card-title h5">@art.Title</div>
-                <p class="card-text"><strong>Artist:</strong> @art.Artist</p>
-                <p class="card-text"><strong>Date:</strong> @art.Date</p>
-                <span class="badge bg-secondary">@art.Source</span>
-                <a class="btn btn-sm btn-outline-primary"
-                   href="@($"/artwork/{art.Source.ToLower()}/{art.Id}")">
-                    Details
-                </a>
-
-                @if (userCollections != null && userCollections.Any())
-                {
-                    <div class="mt-3">
-                   <select class="form-select"
-        @onchange="(e) => OnCollectionSelected(art.Id, Guid.Parse(e.Value?.ToString() ?? Guid.Empty.ToString()))" aria-label="Select collection">
-    <option value="">Select collection</option>
-    @foreach (var col in userCollections)
-    {
-        <option value="@col.Id">@col.Title</option>
-    }
-</select>
-
-                        <button class="btn btn-sm btn-primary mt-2"
-                                @onclick="() => AddArtworkToCollection(art.Id)">
-                            Add to Collection
-                        </button>
-                    </div>
-                }
-            </div> <!-- card-body -->
-        </div> <!-- card -->
-    </div> <!-- col -->
+     
+      <ArtworkCardWithCollection
+        Artwork="art"
+        UserCollections="userCollections"
+        OnAddToCollection="HandleAddArtworkToExhibition" />
 }
         
     </div>
-    ///
- 
-    ///
 }
 
 @code {
@@ -82,23 +51,12 @@ else
     {
         artworkCollectionSelections[artworkId] = collectionId;
     }
-
-    private async Task AddArtworkToCollection(string artworkId)
+    private async Task HandleAddArtworkToExhibition((string artworkId, Guid collectionId) args)
     {
-        if (!artworkCollectionSelections.TryGetValue(artworkId, out var collectionId) || collectionId == Guid.Empty)
-            return; // Optionally show warning
-
-        var artwork = artworks?.FirstOrDefault(a => a.Id == artworkId.ToString());
+        if (args.collectionId == Guid.Empty) return;
+        var artwork = artworks?.FirstOrDefault(a => a.Id == args.artworkId);
         if (artwork == null) return;
 
-        var success = await ExhibitionService.AddArtworkAsync(collectionId, artwork);
-        if (success)
-        {
-            // Refactor: show success message or update UI
-        }
-        else
-        {
-            // Refactor: show error message
-        }
+        var success = await ExhibitionService.AddArtworkAsync(args.collectionId, artwork);
     }
 }

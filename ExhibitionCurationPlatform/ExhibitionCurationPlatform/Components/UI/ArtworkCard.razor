@@ -1,11 +1,31 @@
 ﻿@using ExhibitionCurationPlatform.Models
 
 <div class="card h-100">
-    <img src="@Artwork.ImageUrl" class="card-img-top" alt="@Artwork.Title" />
+    <img src="@(!string.IsNullOrWhiteSpace(Artwork.ImageUrl) ? Artwork.ImageUrl : "/images/image-not-found.png")"
+         class="card-img-top"
+         alt="@Artwork.Title"
+         onerror="this.onerror=null;this.src='/images/image-not-found.png';"
+         height="400" />
     <div class="card-body">
         <div class="card-title h5" aria-label="Title">@Artwork.Title</div>
-        <p class="card-text" aria-label="Description">Create a description to place here</p>
+        <p class="card-text" aria-label="Description">@Artwork.Description</p>
         <span class="badge bg-secondary" aria-label="Source of Artwork ">@Artwork.Source</span>
+        <p class="card-text">
+            <strong>Artist:</strong> @Artwork.Artist<br />
+            @if (Artwork.Date != new DateOnly(1, 1, 1))
+            {
+            <p><strong>Date:</strong> @Artwork.Date.Year.ToString("D4")</p>
+        }
+        else if (!string.IsNullOrWhiteSpace(Artwork.DateAsString))
+        {
+            <p><strong>Date:</strong> @Artwork.DateAsString</p>
+        }
+        else
+        {
+            <p><strong>Date:</strong> Unknown</p>
+        }
+        </p>
+
         <a class="btn btn-sm btn-outline-primary"
            href="@($"/artwork/{@Artwork.Source.ToLower()}/{@Artwork.Id}")">
             Details

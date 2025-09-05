@@ -16,6 +16,11 @@
     </div>
 
     <div class="mb-3">
+        <label for="artwork-description" class="form-label">Description</label>
+        <InputTextArea id="artwork-description" class="form-control" @bind-Value="artwork.Description" />
+    </div>
+
+    <div class="mb-3">
         <label for="artwork-artist" class="form-label">Artist</label>
         <InputText id="artwork-artist" class="form-control" @bind-Value="artwork.Artist" />
     </div>
@@ -27,7 +32,7 @@
 
     <div class="mb-3">
         <label for="artwork-date" class="form-label">Date</label>
-        <InputText id="artwork-date" class="form-control" @bind-Value="artwork.Date" />
+        <InputDate DateFormat="yyyy-MM-dd" id="artwork-date" class="form-control" @bind-Value="artwork.Date" />
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
