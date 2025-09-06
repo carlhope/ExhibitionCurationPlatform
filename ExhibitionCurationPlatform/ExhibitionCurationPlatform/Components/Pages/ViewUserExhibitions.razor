@@ -1,7 +1,12 @@
 ﻿@page "/exhibitions"
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @using ExhibitionCurationPlatform.Components.UI
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @inject IExhibitionService ExhibitionService
 
 <PageTitle>Your Exhibitions</PageTitle>
@@ -49,8 +54,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        
-        var curator = "User"; // Placeholder until Identity is wired in
+
+        var curator = await GetUserId();
         exhibitions = await ExhibitionService.GetExhibitionsByCuratorAsync(curator);
+    }
+    private async Task<string> GetUserId()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        return userId;
     }
 }

@@ -1,8 +1,12 @@
 ﻿@page "/artwork/{Source}/{Id}"
 @rendermode InteractiveServer
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @using ExhibitionCurationPlatform.Components.UI
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+
 @inject IMetMuseumService MetService
 @inject IHarvardArtService HarvardService
 @inject IArtworkService UserService
@@ -39,8 +43,19 @@ else if (!isLoading && artwork != null)
                     artwork = await HarvardService.GetByIdAsync(Id);
                     break;
                 case "user":
+                    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                    var user = authState.User;
+                    var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
                     artwork = await UserService.GetByIdAsync(Id);
+
+                    if (artwork == null || artwork.CreatedBy != userId)
+                    {
+                        notFound = true;
+                        artwork = null;
+                    }
                     break;
+
                 default:
                     notFound = true;
                     break;

@@ -1,16 +1,20 @@
-﻿using ExhibitionCurationPlatform.Models;
+﻿using ExhibitionCurationPlatform.Context;
+using ExhibitionCurationPlatform.Models;
 using ExhibitionCurationPlatform.Repository.Interfaces;
 using ExhibitionCurationPlatform.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExhibitionCurationPlatform.Services
 {
     public class ArtworkService : IArtworkService
     {
         private readonly IArtworkRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ArtworkService(IArtworkRepository repository)
+        public ArtworkService(IArtworkRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
+            _userManager = userManager;
         }
 
         public async Task<Artwork> CreateAsync(Artwork artwork)

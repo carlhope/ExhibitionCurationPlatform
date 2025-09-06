@@ -1,8 +1,13 @@
 ﻿@page "/my-artworks"
 @rendermode InteractiveServer
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @using ExhibitionCurationPlatform.Components.UI
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @inject IArtworkService ArtworkService
 @inject IExhibitionService ExhibitionService
 
@@ -39,7 +44,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var userId = "User"; // Replace with actual user ID once Identity is integrated
+        var userId = await GetUserId();
         artworks = await ArtworkService.GetUserArtworksAsync(userId);
         userCollections = await ExhibitionService.GetExhibitionsByCuratorAsync(userId);
     }
@@ -59,4 +64,12 @@ else
 
         var success = await ExhibitionService.AddArtworkAsync(args.collectionId, artwork);
     }
+    private async Task<string> GetUserId()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        return userId;
+    }
+    
 }

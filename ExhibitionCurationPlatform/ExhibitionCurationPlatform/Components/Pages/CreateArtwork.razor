@@ -1,9 +1,12 @@
 ﻿@page "/my-artwork/create"
 @rendermode InteractiveServer
 @attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @inject IArtworkService ArtworkService
 
 <PageTitle>Create Artwork</PageTitle>
@@ -51,7 +54,10 @@
 
     private async Task HandleValidSubmit()
     {
-        artwork.CreatedBy = "User"; // Replace with actual user ID
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        artwork.CreatedBy = userId; // Replace with actual user ID
         await ArtworkService.CreateAsync(artwork);
         successMessage = "Artwork submitted successfully!";
         artwork = new(); // Reset form

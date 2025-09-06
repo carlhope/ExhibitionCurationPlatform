@@ -15,21 +15,16 @@
             @if (Artwork.Date != new DateOnly(1, 1, 1))
             {
             <p><strong>Date:</strong> @Artwork.Date.Year.ToString("D4")</p>
-        }
-        else if (!string.IsNullOrWhiteSpace(Artwork.DateAsString))
-        {
-            <p><strong>Date:</strong> @Artwork.DateAsString</p>
-        }
-        else
-        {
-            <p><strong>Date:</strong> Unknown</p>
-        }
+            }
+            else if (!string.IsNullOrWhiteSpace(Artwork.DateAsString))
+            {
+                <p><strong>Date:</strong> @Artwork.DateAsString</p>
+            }
+            else
+            {
+                <p><strong>Date:</strong> Unknown</p>
+            }
         </div>
-
-        <a class="btn btn-sm btn-outline-primary"
-           href="@($"/artwork/{@Artwork.Source.ToLower()}/{@Artwork.Id}")">
-            Details
-        </a>
     </div>
 </div>
 

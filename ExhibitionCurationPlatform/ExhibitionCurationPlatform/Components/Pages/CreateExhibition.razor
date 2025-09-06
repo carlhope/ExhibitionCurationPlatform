@@ -1,7 +1,13 @@
 ﻿@page "/exhibitions/create"
 @rendermode InteractiveServer
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @using ExhibitionCurationPlatform.Services.Interfaces
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @inject IExhibitionService ExhibitionService
 
 <PageTitle>Create New Exhibition</PageTitle>
@@ -30,13 +36,16 @@
 }
 
 @code {
-    private ExhibitionInputModel newExhibition = new()
-    {
-        Curator = "User" // Placeholder until Identity is wired in
 
-    };
+    private ExhibitionInputModel newExhibition = new();
 
     private string? successMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await GetUserId();
+        newExhibition.Curator = userId;
+    }
 
     private async Task HandleSubmit()
     {
@@ -49,6 +58,13 @@
         successMessage = $"Exhibition '{created.Title}' created successfully.";
         newExhibition = new() { Curator = "User" }; // Reset form
     }
+    private async Task<string> GetUserId()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        return userId;
+    }
 
     public class ExhibitionInputModel
     {
@@ -59,4 +75,5 @@
 
         public string Curator { get; set; } = string.Empty;
     }
+   
 }

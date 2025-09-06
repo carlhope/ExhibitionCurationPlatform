@@ -1,0 +1,33 @@
+﻿@page "/account/logout"
+@using ExhibitionCurationPlatform.Context
+@using Microsoft.AspNetCore.Identity
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+@if (_hasLoggedOut)
+{
+    <p>you have been logged out</p>
+}
+else
+{
+    <p>you are still logged in</p>
+}
+
+@code {
+    private bool _hasLoggedOut;
+    private SignInManager<ApplicationUser> _signInManager { get; set; }
+    public  Logout(SignInManager<ApplicationUser> signInManager)
+    {
+        _signInManager = signInManager;
+        _signInManager.SignOutAsync();
+        _hasLoggedOut = true;
+        
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && _hasLoggedOut)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+}

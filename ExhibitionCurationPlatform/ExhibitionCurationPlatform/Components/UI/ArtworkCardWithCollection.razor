@@ -10,6 +10,7 @@
         <div class="card-title h5">@Artwork.Title</div>
         <p class="card-text" aria-label="Description">@Artwork.Description</p>
         <p class="card-text"><strong>Artist:</strong> @Artwork.Artist</p>
+        <div class="card-text">
         @if (Artwork.Date != new DateOnly(1, 1, 1))
         {
             <p><strong>Date:</strong> @Artwork.Date.Year.ToString("D4")</p>
@@ -22,6 +23,7 @@
         {
             <p><strong>Date:</strong> Unknown</p>
         }
+        </div>
         <span class="badge bg-secondary">@Artwork.Source</span>
         <a class="btn btn-sm btn-outline-primary"
            href="@($"/artwork/{Artwork.Source.ToLower()}/{Artwork.Id}")">

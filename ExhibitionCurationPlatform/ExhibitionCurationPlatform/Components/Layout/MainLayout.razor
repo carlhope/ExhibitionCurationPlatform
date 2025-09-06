@@ -1,4 +1,11 @@
-﻿@inherits LayoutComponentBase
+﻿@using ExhibitionCurationPlatform.Components.UI
+@using ExhibitionCurationPlatform.Context
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+@inherits LayoutComponentBase
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="app-container">
     <header class="app-header">
@@ -54,6 +61,22 @@
                         </li>
 
                     </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <AuthorizeView>
+                            <Authorized>
+                                <a class="nav-link" href="/account/logout">Logout</a>
+                            </Authorized>
+                            <NotAuthorized>
+                                <li class="nav-item">
+                                    <NavLink class="nav-link" href="/account/register">Register</NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink class="nav-link" href="/account/login">Login</NavLink>
+                                </li>
+                            </NotAuthorized>
+                        </AuthorizeView>
+                    </ul>
+
 
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
@@ -72,3 +95,6 @@
         <p>&copy; 2025 Exhibition Curation Platform</p>
     </footer>
 </div>
+@code{
+   
+}
