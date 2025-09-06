@@ -8,6 +8,9 @@ using ExhibitionCurationPlatform.Services;
 using ExhibitionCurationPlatform.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ExhibitionCurationPlatform.Components.Account;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExhibitionCurationPlatform
 {
@@ -16,6 +19,7 @@ namespace ExhibitionCurationPlatform
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");;
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("ExhibitionDb"));
@@ -41,6 +45,28 @@ namespace ExhibitionCurationPlatform
             builder.Services.AddScoped<IExhibitionRepository,ExhibitionRepository>();
             builder.Services.AddScoped<IExhibitionService, ExhibitionService>();
 
+            builder.Services.AddCascadingAuthenticationState();
+
+            builder.Services.AddScoped<IdentityUserAccessor>();
+
+            builder.Services.AddScoped<IdentityRedirectManager>();
+
+            builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
+            builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+    })
+    .AddIdentityCookies();
+
+            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
+
+            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
 
             var app = builder.Build();
 
@@ -65,6 +91,8 @@ namespace ExhibitionCurationPlatform
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+
+            app.MapAdditionalIdentityEndpoints();;
 
             app.Run();
         }

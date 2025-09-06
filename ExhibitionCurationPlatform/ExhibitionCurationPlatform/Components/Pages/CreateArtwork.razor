@@ -1,7 +1,9 @@
 ﻿@page "/my-artwork/create"
 @rendermode InteractiveServer
+@attribute [Authorize]
 @using ExhibitionCurationPlatform.Models
 @using ExhibitionCurationPlatform.Services.Interfaces
+@using Microsoft.AspNetCore.Authorization
 @inject IArtworkService ArtworkService
 
 <PageTitle>Create Artwork</PageTitle>
