@@ -29,7 +29,7 @@ namespace ExhibitionCurationPlatform.Tests
             Assert.Equal("Sunflowers", result.Title);
             Assert.Equal("Vincent van Gogh", result.Artist);
             Assert.Equal("http://example.com/image.jpg", result.ImageUrl);
-            //Assert.Equal("1888", result.Date);
+            Assert.Equal("1888", result.DateAsString);
             Assert.Equal("Met", result.Source);
         }
 
@@ -44,7 +44,7 @@ namespace ExhibitionCurationPlatform.Tests
             Assert.Equal("Untitled", result.Title);
             Assert.Equal("Unknown", result.Artist);
             Assert.Null(result.ImageUrl);
-            //Assert.Equal("Date unknown", result.Date);
+            Assert.Equal("Date unknown", result.DateAsString);
             Assert.Equal("Met", result.Source);
         }
     }

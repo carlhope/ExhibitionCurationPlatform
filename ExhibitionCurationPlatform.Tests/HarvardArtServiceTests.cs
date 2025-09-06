@@ -59,7 +59,7 @@ namespace ExhibitionCurationPlatform.Tests
             Assert.Equal("http://example.com/image.jpg", artwork.ImageUrl);
             Assert.Equal("Harvard", artwork.Source);
             Assert.Equal("123", artwork.Id);
-            //Assert.Equal("2020", artwork.Date);
+            Assert.Equal("2020", artwork.DateAsString);
         }
     }
 }
