@@ -2,6 +2,7 @@
 @using ExhibitionCurationPlatform.Context
 @using Microsoft.AspNetCore.Identity
 @rendermode InteractiveServer
+@inject SignInManager<ApplicationUser> SignInManager
 @inject NavigationManager Navigation
 
 @if (_hasLoggedOut)
@@ -15,19 +16,10 @@ else
 
 @code {
     private bool _hasLoggedOut;
-    private SignInManager<ApplicationUser> _signInManager { get; set; }
-    public  Logout(SignInManager<ApplicationUser> signInManager)
+    protected override async Task OnInitializedAsync()
     {
-        _signInManager = signInManager;
-        _signInManager.SignOutAsync();
+        await SignInManager.SignOutAsync();
         _hasLoggedOut = true;
-        
-    }
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender && _hasLoggedOut)
-        {
-            Navigation.NavigateTo("/");
-        }
+        Navigation.NavigateTo("/test", true);
     }
 }
