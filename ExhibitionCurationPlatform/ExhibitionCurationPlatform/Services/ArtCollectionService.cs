@@ -1,6 +1,7 @@
 ﻿using ExhibitionCurationPlatform.Models;
 using ExhibitionCurationPlatform.Services.Interfaces;
 using ExhibitionCurationPlatform.Static_Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ExhibitionCurationPlatform.Services
 {
@@ -23,11 +24,16 @@ namespace ExhibitionCurationPlatform.Services
             string? filterBy = null
             )
         {
-            var metResults = await _met.SearchAsync(query, filterBy);
+            var metTask = _met.SearchAsync(query, filterBy);
+            var harvardTask = _harvard.SearchAsync(query, filterBy);
+
+            await Task.WhenAll(metTask, harvardTask);
+
+            var metResults = metTask.Result;
             foreach (var artwork in metResults)
                 artwork.Source = "MetMuseum";
 
-            var harvardResults = await _harvard.SearchAsync(query, filterBy);
+            var harvardResults = harvardTask.Result;
             foreach (var artwork in harvardResults)
                 artwork.Source = "HarvardArtMuseums";
 
@@ -57,4 +63,4 @@ namespace ExhibitionCurationPlatform.Services
             };
         }
     }
-}
+} 
