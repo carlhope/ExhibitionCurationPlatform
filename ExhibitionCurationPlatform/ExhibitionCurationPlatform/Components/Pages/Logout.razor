@@ -1,25 +1,17 @@
-﻿@page "/account/logout"
-@using ExhibitionCurationPlatform.Context
+﻿@using ExhibitionCurationPlatform.Context
 @using Microsoft.AspNetCore.Identity
 @rendermode InteractiveServer
 @inject SignInManager<ApplicationUser> SignInManager
 @inject NavigationManager Navigation
 
-@if (_hasLoggedOut)
-{
-    <p>you have been logged out</p>
-}
-else
-{
-    <p>you are still logged in</p>
-}
-
+<!--
+  This component logs out the user and redirects to /test.
+  No UI is shown during the process.
+-->
 @code {
-    private bool _hasLoggedOut;
     protected override async Task OnInitializedAsync()
     {
         await SignInManager.SignOutAsync();
-        _hasLoggedOut = true;
         Navigation.NavigateTo("/test", true);
     }
 }

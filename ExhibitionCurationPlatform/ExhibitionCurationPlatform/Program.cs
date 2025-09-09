@@ -61,7 +61,7 @@ namespace ExhibitionCurationPlatform
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-
+            builder.Services.AddRazorPages();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -81,6 +81,7 @@ namespace ExhibitionCurationPlatform
             app.UseAntiforgery();
 
             app.MapStaticAssets();
+            app.MapRazorPages();
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
