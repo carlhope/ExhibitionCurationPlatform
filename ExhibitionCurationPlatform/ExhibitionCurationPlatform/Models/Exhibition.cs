@@ -5,9 +5,9 @@ namespace ExhibitionCurationPlatform.Models
     public class Exhibition
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-        public string Title { get; set; }
-        public string Curator { get; set; } // Optional: could be user name or ID
-        public string Description { get; set; }
+        public required string Title { get; set; }
+        public string? Curator { get; set; } // Optional: could be user name or ID
+        public string? Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ScheduledDate { get; set; } // Optional: for future planning
 
