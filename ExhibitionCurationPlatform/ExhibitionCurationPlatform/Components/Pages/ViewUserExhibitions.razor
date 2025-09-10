@@ -1,8 +1,10 @@
 ﻿@page "/exhibitions"
+@rendermode InteractiveServer
 @attribute [Authorize]
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @using ExhibitionCurationPlatform.Components.UI
 @using ExhibitionCurationPlatform.Models
+@using ExhibitionCurationPlatform.Services
 @using ExhibitionCurationPlatform.Services.Interfaces
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
@@ -17,7 +19,7 @@
 }
 else if (!exhibitions.Any())
 {
-    <p>No exhibitions found for this curator.</p>
+    <div class="alert alert-warning">No exhibitions found for this curator.</div>
 }
 else
 {
@@ -39,7 +41,13 @@ else
                         @foreach (var artwork in exhibition.Artworks)
                         {
                             <div class="col">
-                               <ArtworkCard Artwork="artwork" />
+                                <div class="position-relative">
+                                    <ArtworkCard Artwork="artwork" />
+                                    <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
+                                            @onclick="() => RemoveArtwork(exhibition.Id, artwork.Id)">
+                                        ✖
+                                    </button>
+                                </div>
                             </div>
                         }
                     </div>
@@ -64,5 +72,23 @@ else
         var user = authState.User;
         var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         return userId;
+    }
+    private async Task RemoveArtwork(Guid exhibitionId, string artworkId)
+    {
+        var success = await ExhibitionService.RemoveArtworkAsync(exhibitionId, artworkId);
+        if (success)
+        {
+            // Optionally remove artwork from local list to update UI
+            var exhibition = exhibitions.FirstOrDefault(e => e.Id == exhibitionId);
+            var artworkToRemove = exhibition?.Artworks.FirstOrDefault(a => a.Id == artworkId);
+            if (artworkToRemove != null)
+            {
+                exhibition.Artworks.Remove(artworkToRemove);
+            }
+        }
+        else
+        {
+            Console.WriteLine("Failed to remove artwork.");
+        }
     }
 }
