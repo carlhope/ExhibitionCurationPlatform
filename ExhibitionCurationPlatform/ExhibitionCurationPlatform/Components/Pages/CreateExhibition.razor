@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @attribute [Authorize]
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@using ExhibitionCurationPlatform.Models.Enums
 @using ExhibitionCurationPlatform.Services.Interfaces
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Authorization
@@ -21,10 +22,28 @@
         <InputText id="title" class="form-control" @bind-Value="newExhibition.Title" />
     </div>
 
-
+     <div class="form-group">
     <div class="form-group">
         <label for="description">Description</label>
         <InputTextArea id="description" class="form-control" @bind-Value="newExhibition.Description" />
+    </div>
+      <label for="theme">Theme</label>
+        <InputSelect id="theme" class="form-control" @bind-Value="newExhibition.Theme">
+            @foreach (var theme in Enum.GetValues<ExhibitionTheme>())
+            {
+                <option value="@theme">@theme</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="layout">Layout</label>
+        <InputSelect id="layout" class="form-control" @bind-Value="newExhibition.ExhibitionLayout">
+            @foreach (var exhibitionLayout in Enum.GetValues<ExhibitionLayout>())
+            {
+                <option value="@exhibitionLayout">@exhibitionLayout</option>
+            }
+        </InputSelect>
     </div>
 
     <button type="submit" class="btn btn-primary">Create Exhibition</button>
@@ -52,7 +71,9 @@
         var created = await ExhibitionService.CreateExhibitionAsync(
             newExhibition.Title,
             newExhibition.Curator,
-            newExhibition.Description
+            newExhibition.Description,
+            newExhibition.Theme,
+            newExhibition.ExhibitionLayout
         );
 
         successMessage = $"Exhibition '{created.Title}' created successfully.";
@@ -74,6 +95,8 @@
         public string Description { get; set; } = string.Empty;
 
         public string Curator { get; set; } = string.Empty;
+        public ExhibitionLayout ExhibitionLayout { get; set; } = ExhibitionLayout.Grid;
+        public ExhibitionTheme Theme { get; set; } = ExhibitionTheme.Modern;
     }
    
 }

@@ -1,5 +1,6 @@
 ﻿using ExhibitionCurationPlatform.Context;
 using ExhibitionCurationPlatform.Models;
+using ExhibitionCurationPlatform.Models.Enums;
 using ExhibitionCurationPlatform.Repository.Interfaces;
 using ExhibitionCurationPlatform.Services.Interfaces;
 
@@ -14,9 +15,9 @@ namespace ExhibitionCurationPlatform.Services
             _exhibitionRepository = exhibitionRepository;
         }
 
-        public async Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description)
+        public async Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description, ExhibitionTheme theme, ExhibitionLayout layout)
         {
-            return await _exhibitionRepository.CreateExhibitionAsync(title, curator, description);
+            return await _exhibitionRepository.CreateExhibitionAsync(title, curator, description, theme, layout);
         }
 
         public async Task<Exhibition?> GetExhibitionByIdAsync(Guid exhibitionId)

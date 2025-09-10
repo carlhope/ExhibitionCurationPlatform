@@ -1,5 +1,6 @@
 ﻿using ExhibitionCurationPlatform.Context;
 using ExhibitionCurationPlatform.Models;
+using ExhibitionCurationPlatform.Models.Enums;
 using ExhibitionCurationPlatform.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +15,15 @@ namespace ExhibitionCurationPlatform.Repository
             _db = db;
         }
 
-        public async Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description)
+        public async Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description, ExhibitionTheme theme, ExhibitionLayout layout)
         {
             var exhibition = new Exhibition
             {
                 Title = title,
                 Curator = curator,
                 Description = description,
+                Theme = theme,
+                Layout = layout,
                 CreatedAt = DateTime.UtcNow
             };
 

@@ -1,10 +1,11 @@
 ﻿using ExhibitionCurationPlatform.Models;
+using ExhibitionCurationPlatform.Models.Enums;
 
 namespace ExhibitionCurationPlatform.Repository.Interfaces
 {
     public interface IExhibitionRepository
     {
-        Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description);
+        Task<Exhibition> CreateExhibitionAsync(string title, string curator, string description, ExhibitionTheme theme, ExhibitionLayout layout);
         Task<bool> AddArtworkAsync(Guid exhibitionId, Artwork artwork);
         Task<bool> RemoveArtworkAsync(Guid exhibitionId, string artworkId);
         Task<List<Exhibition>> GetExhibitionsByCuratorAsync(string curator);
