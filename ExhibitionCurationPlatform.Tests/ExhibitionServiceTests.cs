@@ -24,15 +24,15 @@ namespace ExhibitionCurationPlatform.Tests
         {
             // Arrange
             var expected = new Exhibition { Title = "Impressionism", Curator = "Carl" };
-            _mockRepo.Setup(r => r.CreateExhibitionAsync("Impressionism", "Carl", "A study in light"))
+            _mockRepo.Setup(r => r.CreateExhibitionAsync("Impressionism", "Carl", "A study in light", Models.Enums.ExhibitionTheme.Classic, Models.Enums.ExhibitionLayout.Masonry))
                      .ReturnsAsync(expected);
 
             // Act
-            var result = await _service.CreateExhibitionAsync("Impressionism", "Carl", "A study in light");
+            var result = await _service.CreateExhibitionAsync("Impressionism", "Carl", "A study in light", Models.Enums.ExhibitionTheme.Classic, Models.Enums.ExhibitionLayout.Masonry);
 
             // Assert
             Assert.Equal(expected, result);
-            _mockRepo.Verify(r => r.CreateExhibitionAsync("Impressionism", "Carl", "A study in light"), Times.Once);
+            _mockRepo.Verify(r => r.CreateExhibitionAsync("Impressionism", "Carl", "A study in light", Models.Enums.ExhibitionTheme.Classic, Models.Enums.ExhibitionLayout.Masonry), Times.Once);
         }
 
         [Fact]
