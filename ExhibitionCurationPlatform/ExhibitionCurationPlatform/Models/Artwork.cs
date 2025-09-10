@@ -6,13 +6,13 @@ namespace ExhibitionCurationPlatform.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required]
-        public required string Title { get; set; }
+        public string Title { get; set; }
         public string? Description { get; set; }
         [Required]
         public string Artist { get; set; }
         [Required]
         [Url]
-        public required string ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
         [Required]
         
         public DateOnly Date { get; set; }
