@@ -52,4 +52,4 @@ jobs:
           app-name: 'ExhibitionCurationPlatform'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_06A9D68F5B564B8AB8BB2823470FB4C8 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3E18802EEB4D462590E173144D0A14E1 }}
