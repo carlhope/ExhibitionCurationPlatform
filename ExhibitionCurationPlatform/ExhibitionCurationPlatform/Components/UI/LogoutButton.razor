@@ -9,6 +9,5 @@
     private async Task Logout()
     {
         await SignInManager.SignOutAsync();
-        Navigation.NavigateTo("/login", true);
     }
 }
