@@ -1,5 +1,6 @@
 ﻿using ExhibitionCurationPlatform.Models;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace ExhibitionCurationPlatform.Mappers
 {
@@ -85,15 +86,37 @@ namespace ExhibitionCurationPlatform.Mappers
         }
         public static DateOnly ParseDateOrDefault(string rawDate, DateOnly fallback)
         {
-            // Try full date first (e.g. "1889-01-01")
+            if (string.IsNullOrWhiteSpace(rawDate))
+                return fallback;
+
+            rawDate = rawDate.ToLower().Trim();
+
+            // Try full date
             if (DateOnly.TryParse(rawDate, out var parsedFull))
                 return parsedFull;
 
-            // Try year-only (e.g. "1889")
+            // Try year-only
             if (int.TryParse(rawDate, out var year) && year > 0)
-                return new DateOnly(year, 1, 1); // Default to Jan 1st of that year
+                return new DateOnly(year, 1, 1);
 
-            // Fallback
+            // Strip prefixes like "ca.", "c.", "late", "early", "mid"
+            rawDate = Regex.Replace(rawDate, @"\b(ca\.|c\.|late|early|mid|–|to)\b", "", RegexOptions.IgnoreCase).Trim();
+
+            // Handle century phrases
+            var centuryMatch = Regex.Match(rawDate, @"(\d+)(?:st|nd|rd|th)? century");
+            if (centuryMatch.Success && int.TryParse(centuryMatch.Groups[1].Value, out var century))
+                return new DateOnly((century - 1) * 100 + 1, 1, 1);
+
+            // Handle ranges like "19th–20th century"
+            var rangeMatch = Regex.Match(rawDate, @"(\d+)(?:st|nd|rd|th)?\s*[-–]\s*(\d+)(?:st|nd|rd|th)? century");
+            if (rangeMatch.Success && int.TryParse(rangeMatch.Groups[1].Value, out var startCentury))
+                return new DateOnly((startCentury - 1) * 100 + 1, 1, 1);
+
+            // Handle hybrid phrases like "late 19th–early 20th century"
+            var hybridMatch = Regex.Match(rawDate, @"(\d+)(?:st|nd|rd|th)? century");
+            if (hybridMatch.Success && int.TryParse(hybridMatch.Groups[1].Value, out var hybridCentury))
+                return new DateOnly((hybridCentury - 1) * 100 + 1, 1, 1);
+
             return fallback;
         }
     }

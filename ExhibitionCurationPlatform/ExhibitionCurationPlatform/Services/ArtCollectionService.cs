@@ -43,7 +43,7 @@ namespace ExhibitionCurationPlatform.Services
                 combined = sortBy switch
                 {
                     SortOptions.Title => combined.OrderBy(a => a.Title).ToList(),
-                    SortOptions.Date => combined.OrderBy(a => a.Date).ToList(),
+                    SortOptions.Date => combined.OrderByDescending(a => a.Date.Year >0002?a.Date:DateOnly.MinValue).ToList(),
                     SortOptions.Artist => combined.OrderBy(a => a.Artist).ToList(),
                     _ => combined
                 };

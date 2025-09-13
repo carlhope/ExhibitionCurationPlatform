@@ -5,7 +5,7 @@
     <select class="form-select me-2" @bind="selectedSort" aria-label="sort artwork by">
         <option value="">Sort by...</option>
         <option value="@SortOptions.Title">Title</option>
-        <option value="@SortOptions.Date">Date</option>
+        <!--<option value="@SortOptions.Date">Date</option>--> <!-- Date sorting is currently disabled due to inconsistent date formats across sources -->
         <option value="@SortOptions.Artist">Artist</option>
     </select>
 
