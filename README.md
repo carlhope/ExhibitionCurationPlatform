@@ -69,3 +69,6 @@ To run the application locally:
 
 - **Enhanced Artwork Creation Tools**  
   Expand the user artwork creation flow to include image uploads, tagging, or richer metadata to support more expressive exhibitions.
+
+- **Sorting by date**  
+  External API's return dates in a wide variety of formats (e.g. "ca. 1800", "19th century", "late 19th-early 20th century"), which makes reliable sorting difficult. A future update will include parsing logic to support sorting by date. Some parsing logic has already been implemented, but the feature is currently commented out in the UI due to incomplete handling of edge cases.
